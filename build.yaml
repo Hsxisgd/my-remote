@@ -12,9 +12,15 @@ include:
     shield: ppt_remote
     artifact-name: ppt_remote-nice_nano
 
-  # ② 调试版：把电量/蓝牙日志从 USB 串口输出，只在排查问题时刷（文件名 ppt_remote-logging.uf2）
+  # ② 调试版：把电量/蓝牙日志从 USB 串口输出，排查问题用（文件名 ppt_remote-logging.uf2）
   - board: nice_nano_v2
     shield: ppt_remote
     snippet: zmk-usb-logging
     cmake-args: -DCONFIG_ZMK_LOG_LEVEL_DBG=y
     artifact-name: ppt_remote-logging
+
+  # ③ 清设置版：ZMK 官方的"清空配对/设置"固件，换固件后连不上时刷它
+  #    （文件名 settings_reset.uf2；刷完必须再刷一次正常版 ①）
+  - board: nice_nano_v2
+    shield: settings_reset
+    artifact-name: settings_reset
