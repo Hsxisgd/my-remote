@@ -1,20 +1,9 @@
-# This file generates the GitHub Actions matrix.
-# For simple board + shield combinations, add them to the top level board and
-# shield arrays, for more control, add individual board + shield combinations
-# to the `include` property. You can also use the `cmake-args` property to
-# pass flags to the build command, `snippet` to add a Zephyr snippet, and
-# `artifact-name` to assign a name to distinguish build outputs from each other:
-#
-# board: [ "nice_nano" ]
-# shield: [ "corne_left", "corne_right" ]
-# include:
-#   - board: bdn9_rev2
-#   - board: nice_nano
-#     shield: reviung41
-#   - board: nice_nano
-#     shield: corne_left
-#     snippet: studio-rpc-usb-uart
-#     cmake-args: -DCONFIG_ZMK_STUDIO=y
-#     artifact-name: corne_left_with_studio
-#
----
+# 这个文件告诉 GitHub Actions：要编译哪个"板子 + 键盘"组合
+# 板子 board：nice_nano（nice!nano，默认 revision 就是 2.0.0 = 你手上的 v2）
+# 键盘 shield：ppt_remote（我们的 11 键遥控器，文件在 boards/shields/ppt_remote/）
+
+include:
+  - board: nice_nano
+    shield: ppt_remote
+    # 如果 Actions 报错说找不到 "nice_nano" 这个 board，把上面那行改成下面这样再提交：
+    # board: nice_nano//zmk
