@@ -1,15 +1,19 @@
 # 这个文件告诉 GitHub Actions：要编译哪个"板子 + 键盘"组合
-# 板子 board：nice_nano（nice!nano v1/v2，默认 revision 就是 2.0.0 = 你手上的 v2）
+#
+# 板子 board 必须用 nice_nano_v2（= nice!nano v2）：
+#     v2 的电量检测用 VDDH（就是你手上这块板子的做法）
+#     如果用 nice_nano（= v1），板级定义会去找 P0.04 的分压电阻，
+#     v2 板子上没有那个电路 → 电量永远显示 0%
 # 键盘 shield：ppt_remote（我们的 11 键遥控器，文件在 boards/shields/ppt_remote/）
 
 include:
   # ① 正常版：平时刷这个（文件名 ppt_remote-nice_nano.uf2）
-  - board: nice_nano
+  - board: nice_nano_v2
     shield: ppt_remote
     artifact-name: ppt_remote-nice_nano
 
-  # ② 调试版：把电量/蓝牙等日志从 USB 串口输出，只在排查问题时刷（文件名 ppt_remote-logging.uf2）
-  - board: nice_nano
+  # ② 调试版：把电量/蓝牙日志从 USB 串口输出，只在排查问题时刷（文件名 ppt_remote-logging.uf2）
+  - board: nice_nano_v2
     shield: ppt_remote
     snippet: zmk-usb-logging
     cmake-args: -DCONFIG_ZMK_LOG_LEVEL_DBG=y
