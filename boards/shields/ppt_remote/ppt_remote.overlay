@@ -21,6 +21,7 @@
     chosen {
         zmk,kscan = &kscan0;
         zmk,physical-layout = &physical_layout0;
+        zmk,battery = &vbatt_div;        /* 电量检测改用下面 P0.04 的分压电路 */
     };
 
     /* 按键扫描：11 个引脚各自接一个按键 */
@@ -62,5 +63,18 @@
         display-name = "Default Layout";
         kscan = <&kscan0>;
         transform = <&default_transform>;
+    };
+
+    /*
+     * 电量检测：用 P0.04（AIN2）上的电池分压电阻来算电池电压。
+     * 这块板子（nice!nano v2 兼容板）实测 VDDH 只有约 3.3V（正常电压模式），
+     * 用板子自带的 zmk,battery-nrf-vddh 换算出来永远是 0%；
+     * 分压参数 2M / 806k 与 ZMK 官方 nice!nano(v1) 的板级定义一致。
+     */
+    vbatt_div: battery_divider {
+        compatible = "zmk,battery-voltage-divider";
+        io-channels = <&adc 2>;
+        output-ohms = <2000000>;
+        full-ohms = <(2000000 + 806000)>;
     };
 };
