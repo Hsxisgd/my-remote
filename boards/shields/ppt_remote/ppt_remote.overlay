@@ -1,0 +1,66 @@
+/*
+ * PPT Remote —— 11 个直连按键的蓝牙遥控器（nice!nano / nRF52840）
+ *
+ * 硬件接法：每个按键一脚接下面的 IO，另一脚接 GND（所有按键共地）。
+ *           用芯片内部上拉，不需要外接电阻，也不需要二极管。
+ *
+ * 引脚写法和模块丝印的对应关系（&gpio0 6 就是 P0.06）：
+ *   SW1  Shift+→   D1  P0.06        SW7  F6       D6  P1.00
+ *   SW2  ↑         D0  P0.08        SW8  Shift+←  D7  P0.11
+ *   SW3  ↓         D2  P0.17        SW9  ESC      D8  P1.04
+ *   SW4  回车      D3  P0.20        SW10 PgUp     D9  P1.06
+ *   SW5  [         D4  P0.22        SW11 PgDn     D10 P0.09
+ *   SW6  ]         D5  P0.24
+ *
+ * 注意 D0/D1 是反的：D1 = P0.06，D0 = P0.08；D10 = P0.09（不是 P0.10）。
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,physical-layout = &physical_layout0;
+    };
+
+    /* 按键扫描：11 个引脚各自接一个按键 */
+    kscan0: kscan0 {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+        debounce-press-ms = <5>;
+        debounce-release-ms = <5>;
+
+        input-gpios
+            = <&gpio0 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW1  D1  P0.06  Shift+→ */
+            , <&gpio0 8  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW2  D0  P0.08  ↑ */
+            , <&gpio0 17 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW3  D2  P0.17  ↓ */
+            , <&gpio0 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW4  D3  P0.20  回车 */
+            , <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW5  D4  P0.22  [ */
+            , <&gpio0 24 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW6  D5  P0.24  ] */
+            , <&gpio1 0  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW7  D6  P1.00  F6 */
+            , <&gpio0 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW8  D7  P0.11  Shift+← */
+            , <&gpio1 4  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW9  D8  P1.04  ESC */
+            , <&gpio1 6  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW10 D9  P1.06  PgUp */
+            , <&gpio0 9  (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* SW11 D10 P0.09  PgDn */
+            ;
+    };
+
+    /* 键盘矩阵变换：11 个直连引脚相当于 1 行 11 列，顺序就是上面的顺序 */
+    default_transform: keymap_transform0 {
+        compatible = "zmk,matrix-transform";
+        columns = <11>;
+        rows = <1>;
+        map = <
+            RC(0,0) RC(0,1) RC(0,2) RC(0,3) RC(0,4) RC(0,5)
+            RC(0,6) RC(0,7) RC(0,8) RC(0,9) RC(0,10)
+        >;
+    };
+
+    /* 物理布局（新版 ZMK 必需）：把 kscan 和上面的变换绑在一起 */
+    physical_layout0: physical_layout_0 {
+        compatible = "zmk,physical-layout";
+        display-name = "Default Layout";
+        kscan = <&kscan0>;
+        transform = <&default_transform>;
+    };
+};

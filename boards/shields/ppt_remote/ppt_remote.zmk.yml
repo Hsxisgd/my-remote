@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: MIT
+# 硬件元数据文件：给 ZMK 的网站/工具看的高层信息，文件名必须是 <键盘名>.zmk.yml
+
+file_format: "1"
+id: ppt_remote
+name: PPT Remote
+type: shield
+url: https://zmk.dev
+requires: [pro_micro]
+exposes: [pro_micro]
+features:
+  - keys

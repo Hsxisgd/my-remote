@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: MIT
+# 这里设置这个键盘的默认值。ZMK_KEYBOARD_NAME 会显示在电脑/USB 的
+# 设备名里，也会是蓝牙里搜索到的名字（注意要少于 16 个字符）
+
+if SHIELD_PPT_REMOTE
+
+config ZMK_KEYBOARD_NAME
+    default "PPT Remote"
+
+endif

@@ -1,0 +1,32 @@
+/*
+ * 每个按键发什么键。
+ * 顺序必须和 ppt_remote.overlay 里 input-gpios 的顺序完全一致（SW1 → SW11）。
+ *
+ * 键名大全： https://zmk.dev/docs/keymaps/list-of-keycodes
+ * （LS(x) = 左 Shift + x；想改成别的键，把 &kp 后面那个名字换掉即可）
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer {
+            bindings = <
+                &kp LS(RIGHT)   /* SW1  D1  P0.06  Shift+→ （按住时由系统连发） */
+                &kp UP          /* SW2  D0  P0.08  ↑ */
+                &kp DOWN        /* SW3  D2  P0.17  ↓ */
+                &kp ENTER       /* SW4  D3  P0.20  回车 */
+                &kp LBKT        /* SW5  D4  P0.22  [ */
+                &kp RBKT        /* SW6  D5  P0.24  ] */
+                &kp F6          /* SW7  D6  P1.00  F6 */
+                &kp LS(LEFT)    /* SW8  D7  P0.11  Shift+← */
+                &kp ESC         /* SW9  D8  P1.04  ESC */
+                &kp PG_UP       /* SW10 D9  P1.06  PgUp */
+                &kp PG_DN       /* SW11 D10 P0.09  PgDn */
+            >;
+        };
+    };
+};

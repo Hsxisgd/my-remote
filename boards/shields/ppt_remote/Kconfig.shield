@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: MIT
+# 让 ZMK 认识 "ppt_remote" 这个键盘名（build.yaml 里的 shield 就写这个名字）
+
+config SHIELD_PPT_REMOTE
+    def_bool $(shields_list_contains,ppt_remote)
